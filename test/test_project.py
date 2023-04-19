@@ -1,6 +1,6 @@
 import unittest
 
-from reimbursements.main import Project, ProjectDay
+from src.main import Project, ProjectDay
 
 class TestProject (unittest.TestCase):
     def test_single_project_day_should_be_travel (self):

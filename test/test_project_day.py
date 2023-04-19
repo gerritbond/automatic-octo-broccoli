@@ -1,7 +1,7 @@
 import unittest
 import datetime
 
-from reimbursements.main import ProjectDay
+from src.main import ProjectDay
 
 class TestProjectDay (unittest.TestCase):
     def test_reimbursing_low_cost_travel_day (self):

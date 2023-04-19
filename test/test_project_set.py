@@ -1,6 +1,6 @@
 import unittest
 
-from reimbursements.main import Project, ProjectSet
+from src.main import Project, ProjectSet
 
 class TestProjectSet (unittest.TestCase):
     def test_no_duplicates_when_projects_overlap (self):
