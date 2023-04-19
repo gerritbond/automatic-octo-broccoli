@@ -7,16 +7,29 @@ LOW_COST_CITY_FULL_RATE = 75
 HIGH_COST_CITY_TRAVEL_RATE = 55
 HIGH_COST_CITY_FULL_RATE = 85
 
-
 class ProjectDay:
-    def __init__ (self, reimbursement_tier: str, is_travel_day: bool, date: datetime.date):
-        self.reimbursement_tier = reimbursement_tier
+    def __init__ (self, is_high_cost_city: bool, is_travel_day: bool, date: datetime.date):
+        self.is_high_cost_city = is_high_cost_city
         self.is_travel_day = is_travel_day
         self.date = date
 
+class Project:
+    def __init__ (self, city_cost, start_date, end_date):
+        self.is_high_cost_city = city_cost.lower() == "high"
+        self.start_date = start_date
+        self.end_date = end_date
+
+    def convert_to_days (self) -> list[ProjectDay]:
+        return []
+
 class ProjectSet:
-    def __init__ (self, json_def):
-        self.__dict__ = json.loads(json_def)
+    def __init__ (self, json_def: str):
+        self.projects: list[Project] = []
+
+        # Process each of the projects into a model 
+        projectData = json.loads(json_def)['projects']
+        for d in projectData:
+            self.projects.append(Project(d))
 
 
 # Assess the total amount to reimburse for a provided set of project days
@@ -24,13 +37,12 @@ def assess_reimbursement_costs (project_days: list[ProjectDay]) -> int:
     total = 0
 
     for day in project_days:
-        if day.reimbursement_tier.lower() == "high":
+        if day.is_high_cost_city:
             total += HIGH_COST_CITY_TRAVEL_RATE if day.is_travel_day else HIGH_COST_CITY_FULL_RATE
         else:
             total += LOW_COST_CITY_TRAVEL_RATE if day.is_travel_day else LOW_COST_CITY_FULL_RATE
     
     return total
-
 
 # Determines actual project days for the provided project set
 def determine_project_days (project_set: ProjectSet) -> list[ProjectDay]:
