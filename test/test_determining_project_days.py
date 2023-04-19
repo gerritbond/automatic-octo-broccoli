@@ -101,11 +101,11 @@ class TestProjectSet (unittest.TestCase):
         days = project_set.determine_actual_days()
 
         self.assertEqual(len(days), 8)
-        
+
         # These are the two days that are on either side of the gap in the projects above
         self.assertTrue(days[2].is_travel_day)
         self.assertTrue(days[3].is_travel_day)
-        
+
     def test_overlapping_day_with_different_rates_considered_high (self):
         projects = [
             Project(city_cost="High", start_date="2015/09/01", end_date="2015/09/03"),
