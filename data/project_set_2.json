@@ -1,0 +1,19 @@
+{
+    "projects": [
+        {
+            "city_cost": "Low",
+            "start_date": "2015/09/01",
+            "end_date": "2015/09/01"
+        },
+        {
+            "city_cost": "High",
+            "start_date": "2015/09/02",
+            "end_date": "2015/09/06"
+        },
+        {
+            "city_cost": "Low",
+            "start_date": "2015/09/06",
+            "end_date": "2015/09/08"
+        }
+    ]
+}
