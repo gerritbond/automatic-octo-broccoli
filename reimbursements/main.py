@@ -31,6 +31,7 @@ class ProjectDay:
     def pretty_print (self):
         print (f"{self.date.strftime('%Y/%m/%d')}: {self.calculate_reimbursement()}")
 
+
 class Project:
     DATE_FORMAT = "%Y/%m/%d"
 

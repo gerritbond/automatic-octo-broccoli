@@ -6,19 +6,38 @@ This repository contains an implementation of a technical interview question pro
 
 To run the code, you will need to have at least Python 3. It has been developed with *Python 3.9.5*
 
+We are only using python builtins, no extra packages are required.
+
 The program takes as input any filenames containing a project set to be evaluated.
 
 ```bash
-python ./reimbursements/main.py 
+python reimbursements/main.py data/project_set.json [data/project_set...]
+```
+
+The JSON format expected is:
+```json
+{
+    "projects": [
+        {
+            "city_cost": "Low" | "High",
+            "start_date": "2015/09/01",
+            "end_date": "2015/09/03"
+        }
+    ]
+}
 ```
 
 ## Running the tests
 
-**TODO** Add some testing into the mix as the logic is built out
+There are three test files, divided up among the different models in use.
 
+To run these tests, run the following command:
+
+```
+python -m unittest test/test_*
+```
 
 ## Problem Description
-
 
 ### Technical Exercise:
 You have a set of projects, and you need to calculate a reimbursement amount for the set. Each project has a start date and an end date. The first day of a project and the last day of a project are always "travel" days. Days in the middle of a project are "full" days. There are also two types of cities a project can be in, high cost cities and low cost cities.
