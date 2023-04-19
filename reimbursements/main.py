@@ -23,14 +23,12 @@ class Project:
         return []
 
 class ProjectSet:
-    def __init__ (self, json_def: str):
-        self.projects: list[Project] = []
+    def __init__ (self, projects: list[Project] = []):
+        self.projects = projects
 
-        # Process each of the projects into a model 
-        projectData = json.loads(json_def)['projects']
-        for d in projectData:
-            self.projects.append(Project(d))
-
+    # Determines actual project days for the provided project set
+    def determine_actual_days (self) -> list[ProjectDay]:
+        return []
 
 # Assess the total amount to reimburse for a provided set of project days
 def assess_reimbursement_costs (project_days: list[ProjectDay]) -> int:
@@ -44,19 +42,21 @@ def assess_reimbursement_costs (project_days: list[ProjectDay]) -> int:
     
     return total
 
-# Determines actual project days for the provided project set
-def determine_project_days (project_set: ProjectSet) -> list[ProjectDay]:
-    return []
-
 # Loads project sets from a list of filenames
 def load (filenames: list[str]) -> ProjectSet:
     project_sets = []    
     # Read in project sets from command line, passed in as json files.
     for name in filenames:
+        project_set = ProjectSet()
+
         try:
             with open(name, 'r') as f:
                 data = f.read()
-                project_sets.append(ProjectSet(data))
+                projectData = json.loads(data)['projects']
+                for d in projectData:
+                    project_set.projects.append(Project(d["city_cost"], d["start_date"], d["end_date"]))
+
+            project_sets.append(project_set)
         except:
             print(f"Encountered a problem reading in set file {name}; skipping")
 
@@ -70,5 +70,4 @@ if __name__ == '__main__':
         sys.exit(1)
 
     project_sets = load(filenames)
-
 
