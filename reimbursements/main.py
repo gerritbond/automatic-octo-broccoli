@@ -14,13 +14,29 @@ class ProjectDay:
         self.date = date
 
 class Project:
+    DATE_FORMAT = "%Y/%m/%d"
+
     def __init__ (self, city_cost, start_date, end_date):
         self.is_high_cost_city = city_cost.lower() == "high"
-        self.start_date = start_date
-        self.end_date = end_date
+        self.start_date = datetime.datetime.strptime(start_date, Project.DATE_FORMAT)
+        self.end_date = datetime.datetime.strptime(end_date, Project.DATE_FORMAT)
 
     def convert_to_days (self) -> list[ProjectDay]:
-        return []
+        project_days: list[ProjectDay] = []
+        time_delta = self.end_date - self.start_date
+
+        for t in range(time_delta.days + 1):
+            project_days.append(
+                ProjectDay(
+                    is_high_cost_city=self.is_high_cost_city, 
+                    is_travel_day=False, 
+                    date=self.start_date+datetime.timedelta(days=t)))
+        
+        # Set the first and last day of a project as travel days
+        project_days[0].is_travel_day = True
+        project_days[len(project_days) - 1].is_travel_day = True
+
+        return project_days
 
 class ProjectSet:
     def __init__ (self, projects: list[Project] = []):
