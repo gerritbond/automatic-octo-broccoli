@@ -56,17 +56,17 @@ class Project:
 
         return project_days
 
-    def calculate_reimbursement (self):
+    def summarize (self):
         days = self.convert_to_days()
-        total = 0
 
         for day in days:
-            total += day.calculate_reimbursement()
+            day.pretty_print()
 
 
 class ProjectSet:
-    def __init__ (self, projects: list[Project] = []):
+    def __init__ (self, projects: list[Project], set_name:str=""):
         self.projects = projects
+        self.set_name = set_name
 
     # Determines actual project days for the provided project set
     def determine_actual_days (self) -> list[ProjectDay]:
@@ -112,26 +112,42 @@ class ProjectSet:
 
         return actual_project_days
 
+    def summarize (self):
+        actual_project_days = project_set.determine_actual_days()
+        
+        print(f"Submitted Project Days for {self.set_name}")
+        for project in self.projects:
+            project.summarize()
+            print("-------\n")
+
+        set_total = 0
+        print(f"Actual Project Days for {self.set_name}:")
+        for day in actual_project_days:
+            set_total += day.calculate_reimbursement()
+            day.pretty_print()
+        print(f"Total Reimbursement Owed: {set_total}")
+
+
 # Loads project sets from a list of filenames
-def load (files: list[str]) -> ProjectSet:
+def load (files: list[str]) -> list[ProjectSet]:
     sets = []
     # Read in project sets from command line, passed in as json files.
     for name in files:
-        project_set = ProjectSet()
+        projects = []
 
         try:
             with open(name, 'r', encoding="UTF-8") as f:
                 data = f.read()
                 project_data = json.loads(data)['projects']
                 for d in project_data:
-                    project_set.projects.append(
+                    projects.append(
                         Project(d["city_cost"], d["start_date"], d["end_date"]))
 
-            sets.append(project_set)
+            sets.append(ProjectSet(projects, name))
         except FileNotFoundError:
             print(f"Encountered a problem reading in set file {name}; skipping")
 
-    return project_sets
+    return sets
 
 # Code to execute if this file is being used to actual assess a project and not just under test
 if __name__ == '__main__':
@@ -141,3 +157,6 @@ if __name__ == '__main__':
         sys.exit(1)
 
     project_sets = load(filenames)
+    for project_set in project_sets:
+        project_set.summarize()
+        print("\n")
