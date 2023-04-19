@@ -154,7 +154,7 @@ def load (files: list[str]) -> list[ProjectSet]:
 if __name__ == '__main__':
     filenames = sys.argv[1:]
     if len(filenames) == 0:
-        print ("Usage: py3 main.py project_set.json [project_set_2.json ..]")
+        print ("Usage: python src/main.py data/project_set.json [data/project_set...]")
         sys.exit(1)
 
     project_sets = load(filenames)
