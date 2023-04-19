@@ -11,7 +11,22 @@ We are only using python builtins, no extra packages are required.
 The program takes as input any filenames containing a project set to be evaluated.
 
 ```bash
-python reimbursements/main.py data/project_set.json [data/project_set...]
+python src/main.py data/project_set.json [data/project_set...]
+```
+
+To run all original project sets;
+
+```bash
+python src/main.py data/project_set_1.json data/project_set_2.json data/project_set_3.json data/project_set_4.json
+```
+
+or
+
+```bash
+python src/main.py data/project_set_1.json
+python src/main.py data/project_set_2.json 
+python src/main.py data/project_set_3.json
+python src/main.py data/project_set_4.json
 ```
 
 The JSON format expected is:
