@@ -9,7 +9,7 @@ To run the code, you will need to have at least Python 3. It has been developed 
 The program takes as input any filenames containing a project set to be evaluated.
 
 ```bash
-python ./src/main.py 
+python ./reimbursements/main.py 
 ```
 
 ## Running the tests
