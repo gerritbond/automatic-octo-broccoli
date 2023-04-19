@@ -29,6 +29,24 @@ python src/main.py data/project_set_3.json
 python src/main.py data/project_set_4.json
 ```
 
+Each project set will be output a summary of the information passed in, and the ultimate schedule. Along with a total reimbursement. For example; the first project set yields:
+
+```
+Submitted Project Days for data/project_set_1.json
+2015/09/01: 45
+2015/09/02: 75
+2015/09/03: 45
+-------
+
+Actual Project Days for data/project_set_1.json:
+2015/09/01: 45
+2015/09/02: 75
+2015/09/03: 45
+Total Reimbursement Owed: 165
+```
+
+If you want to use a project set not included in the initial problem, your format should look like:
+
 The JSON format expected is:
 ```json
 {
