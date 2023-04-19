@@ -2,16 +2,26 @@ import json
 import sys
 import datetime
 
-LOW_COST_CITY_TRAVEL_RATE = 45
-LOW_COST_CITY_FULL_RATE = 75
-HIGH_COST_CITY_TRAVEL_RATE = 55
-HIGH_COST_CITY_FULL_RATE = 85
-
 class ProjectDay:
+    LOW_COST_CITY_TRAVEL_RATE = 45
+    LOW_COST_CITY_FULL_RATE = 75
+    HIGH_COST_CITY_TRAVEL_RATE = 55
+    HIGH_COST_CITY_FULL_RATE = 85
+
     def __init__ (self, is_high_cost_city: bool, is_travel_day: bool, date: datetime.date):
         self.is_high_cost_city = is_high_cost_city
         self.is_travel_day = is_travel_day
         self.date = date
+
+    def calculate_reimbursement (self):
+        total = 0
+        if self.is_high_cost_city:
+            total += ProjectDay.HIGH_COST_CITY_TRAVEL_RATE if self.is_travel_day else ProjectDay.HIGH_COST_CITY_FULL_RATE
+        else:
+            total += ProjectDay.LOW_COST_CITY_TRAVEL_RATE if self.is_travel_day else ProjectDay.LOW_COST_CITY_FULL_RATE
+        
+        return total
+
 
 class Project:
     DATE_FORMAT = "%Y/%m/%d"
@@ -38,6 +48,14 @@ class Project:
 
         return project_days
 
+    def calculate_reimbursement (self):
+        days = self.convert_to_days()
+        total = 0
+
+        for d in days:
+            total += d.calculate_reimbursement()
+
+
 class ProjectSet:
     def __init__ (self, projects: list[Project] = []):
         self.projects = projects
@@ -45,18 +63,6 @@ class ProjectSet:
     # Determines actual project days for the provided project set
     def determine_actual_days (self) -> list[ProjectDay]:
         return []
-
-# Assess the total amount to reimburse for a provided set of project days
-def assess_reimbursement_costs (project_days: list[ProjectDay]) -> int:
-    total = 0
-
-    for day in project_days:
-        if day.is_high_cost_city:
-            total += HIGH_COST_CITY_TRAVEL_RATE if day.is_travel_day else HIGH_COST_CITY_FULL_RATE
-        else:
-            total += LOW_COST_CITY_TRAVEL_RATE if day.is_travel_day else LOW_COST_CITY_FULL_RATE
-    
-    return total
 
 # Loads project sets from a list of filenames
 def load (filenames: list[str]) -> ProjectSet:

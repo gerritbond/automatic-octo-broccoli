@@ -1,30 +1,30 @@
 import unittest
 import datetime
 
-from reimbursements.main import ProjectDay, assess_reimbursement_costs
+from reimbursements.main import Project, ProjectDay
 
 class TestReimbursements (unittest.TestCase):
     def test_reimbursing_low_cost_travel_day (self):
         day = ProjectDay(is_high_cost_city=False, is_travel_day=True, date=datetime.date(2015, 9, 1))
-        reimbursement = assess_reimbursement_costs ([day])
+        reimbursement = day.calculate_reimbursement()
         
         self.assertEqual(reimbursement, 45)
 
     def test_reimbursing_high_cost_travel_day (self):
         day = ProjectDay(is_high_cost_city=True, is_travel_day=True, date=datetime.date(2015, 9, 1))
-        reimbursement = assess_reimbursement_costs ([day])
+        reimbursement = day.calculate_reimbursement()
         
         self.assertEqual(reimbursement, 55)
 
     def test_reimbursing_low_cost_full_day (self):
         day = ProjectDay(is_high_cost_city=False, is_travel_day=False, date=datetime.date(2015, 9, 1))
-        reimbursement = assess_reimbursement_costs ([day])
+        reimbursement = day.calculate_reimbursement()
         
         self.assertEqual(reimbursement, 75)
 
     def test_reimbursing_high_cost_full_day (self):
         day = ProjectDay(is_high_cost_city=True, is_travel_day=False, date=datetime.date(2015, 9, 1))
-        reimbursement = assess_reimbursement_costs ([day])
+        reimbursement = day.calculate_reimbursement()
         
         self.assertEqual(reimbursement, 85)
 
@@ -33,7 +33,10 @@ class TestReimbursements (unittest.TestCase):
             ProjectDay(is_high_cost_city=True, is_travel_day=False, date=datetime.date(2015, 9, 1)),
             ProjectDay(is_high_cost_city=True, is_travel_day=False, date=datetime.date(2015, 9, 2))
         ]
-        reimbursement = assess_reimbursement_costs(days)
+
+        reimbursement = 0
+        for d in days:
+            reimbursement += d.calculate_reimbursement()
 
         self.assertEqual(reimbursement, 170)
 
@@ -42,7 +45,9 @@ class TestReimbursements (unittest.TestCase):
             ProjectDay(is_high_cost_city=True, is_travel_day=False, date=datetime.date(2015, 9, 1)),
             ProjectDay(is_high_cost_city=False, is_travel_day=False, date=datetime.date(2015, 9, 2))
         ]
-        reimbursement = assess_reimbursement_costs(days)
+        reimbursement = 0
+        for d in days:
+            reimbursement += d.calculate_reimbursement()
 
         self.assertEqual(reimbursement, 160)
 
@@ -52,7 +57,9 @@ class TestReimbursements (unittest.TestCase):
             ProjectDay(is_high_cost_city=True, is_travel_day=True, date=datetime.date(2015, 9, 1)),
             ProjectDay(is_high_cost_city=True, is_travel_day=False, date=datetime.date(2015, 9, 2))
         ]
-        reimbursement = assess_reimbursement_costs(days)
+        reimbursement = 0
+        for d in days:
+            reimbursement += d.calculate_reimbursement()
 
         self.assertEqual(reimbursement, 140)
 
@@ -62,14 +69,18 @@ class TestReimbursements (unittest.TestCase):
             ProjectDay(is_high_cost_city=True, is_travel_day=False, date=datetime.date(2015, 9, 1)),
             ProjectDay(is_high_cost_city=False, is_travel_day=True, date=datetime.date(2015, 9, 2))
         ]
-        reimbursement = assess_reimbursement_costs(days)
+        reimbursement = 0
+        for d in days:
+            reimbursement += d.calculate_reimbursement()
 
         self.assertEqual(reimbursement, 130)
     
     
     def test_reimbursing_no_days (self):
         days = []
-        reimbursement = assess_reimbursement_costs(days)
+        reimbursement = 0
+        for d in days:
+            reimbursement += d.calculate_reimbursement()
 
         self.assertEqual(reimbursement, 0)
 
